@@ -1,0 +1,27 @@
+{
+  "name": "node-cache",
+  "version": "1.0.0",
+  "description": "node cache provider",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icai/node-cache.git"
+  },
+  "keywords": [
+    "node",
+    "cache"
+  ],
+  "author": "Terry Cai",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/icai/node-cache/issues"
+  },
+  "homepage": "https://github.com/icai/node-cache#readme",
+  "devDependencies": {
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  }
+}
