@@ -9,7 +9,10 @@
     "quotemark": [
         true,
         "single"
-    ]
+    ],
+    "semicolon": [false, "always", "ignore-bound-class-methods"],
+    "trailing-comma": [false, {"multiline": "never", "singleline": "never"}],
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": []
 }
