@@ -13,3 +13,7 @@ export const random = (length: number, symbols?: string) => {
 
   return array.join('');
 }
+const matchOpRegex = /[|\\{}()[\]^$+*?.-]/g;
+export const escapeReg = (str: string) => {
+  return str.replace(matchOpRegex, '\\$&');
+};
