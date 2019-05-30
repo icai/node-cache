@@ -51,6 +51,7 @@ export default class Memcache implements ICache {
     if (prefix) {
       const namespace = await this.namespace(prefix, true);
       this.dbcache.clean(namespace);
+      // await this.cleanByPrefix(prefix);
       return true;
     }
     const result = await this.memcacheFlush();
@@ -61,10 +62,17 @@ export default class Memcache implements ICache {
       return false;
     }
   }
+  public async cleanByPrefix(prefix: string) {
+    await this.memcache.items()
+    .then((items) => {
+      // tslint:disable-next-line:no-console
+      console.info(items)
+    })
+  }
 
   public async read(key: string, forcecache = true) {
     key = await this.namespace(key);
-    let result = this.memcacheGet(this.cachePrefix(key));
+    let result = await this.memcacheGet(this.cachePrefix(key));
     if (!result && !forcecache) {
       const dbcache = await this.dbcache.read(key);
       if (!dbcache.value) {
@@ -79,7 +87,7 @@ export default class Memcache implements ICache {
    * @param key search key
    */
   public async search(key: string) {
-    return await this.read(this.cachePrefix(key));
+    return this.read(key);
   }
   /**
    * write the cache
@@ -101,13 +109,13 @@ export default class Memcache implements ICache {
   }
 
   private cachePrefix(key: string) {
-    return tablename(key);
+    return 'ncache:' + key;
   }
 
   private async memcacheGet(key: string) {
     return new Promise((resolve, reject) => {
-      this.memcache.get(this.cachePrefix(key), (res: any) => {
-        resolve(res)
+      this.memcache.get(key).then((res: any) => {
+        resolve(res || '')
       });
     })
   }
@@ -129,8 +137,8 @@ export default class Memcache implements ICache {
 
   private async memcacheFlush(delay?: number) {
     return new Promise((resolve, reject) => {
-      this.memcache.flush(delay, (res: any) => {
-        resolve(true)
+      this.memcache.flush(delay).then((res: any) => {
+        resolve()
       });
     })
   }
@@ -152,7 +160,7 @@ export default class Memcache implements ICache {
     let namespace = await this.memcacheGet(this.cachePrefix(namespaceCacheKey));
     if (!namespace || forcenew) {
       namespace = random(5);
-      await this.memcacheSet(this.cachePrefix(namespaceCacheKey), namespace, MEMCACHE_COMPRESSED);
+      await this.memcacheSet(this.cachePrefix(namespaceCacheKey), namespace, 0);
     }
     return namespace + ':' + key;
   }

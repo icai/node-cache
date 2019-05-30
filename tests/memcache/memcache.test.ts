@@ -1,4 +1,7 @@
 import { config } from '../../src/index';
+interface IRes {
+  ncache: string
+}
 describe('memcache', () => {
   let mem: any;
   beforeAll(async () => {
@@ -25,26 +28,26 @@ describe('memcache', () => {
 
   test('mem read', async () => {
     expect.assertions(1);
-    await mem.read('mem_test1').then((res: any) => {
-      expect(res.data.ncache).toBe('testing1');
+    await mem.read('mem_test1').then((res: IRes) => {
+      expect(res.ncache).toBe('testing1');
     })
   });
 
-  test('mem search', async () => {
+  test('mem search alias read', async () => {
     expect.assertions(2);
-    await mem.search('mem').then((res: any) => {
-      expect(res.mem_test3.data.ncache).toBe('testing3');
+    await mem.search('mem_test3').then((res: IRes) => {
+      expect(res.ncache).toBe('testing3');
     })
-    await mem.search('mem_test').then((res: any) => {
-      expect(res.mem_test2.data.ncache).toBe('testing2');
+    await mem.search('mem_test2').then((res: IRes) => {
+      expect(res.ncache).toBe('testing2');
     })
   });
-  test('mem clean with prefix', async () => {
+  test('mem clean', async () => {
     expect.assertions(1);
-    await mem.write('prefix_test_write1', { ncache: 'prefix_test_write1' })
-    await mem.write('prefix_test_write2', { ncache: 'prefix_test_write2' })
-    await mem.write('prefix_test_write3', { ncache: 'prefix_test_write3' })
-    await mem.clean('prefix')
+    await mem.write('prefix_test_write1', { ncache: 'prefix_test_write1' }, 100)
+    await mem.write('prefix_test_write2', { ncache: 'prefix_test_write2' }, 100)
+    await mem.write('prefix_test_write3', { ncache: 'prefix_test_write3' }, 100)
+    await mem.clean();
     await mem.read('prefix_test_write1').then((res: any) => {
       expect(res).toBe('');
     })

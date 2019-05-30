@@ -24,6 +24,7 @@ declare class index {
   gets(key: any, opts: any, cb: any): any;
   incr(key: any, val: any, cb: any): any;
   items(cb: any): any;
+  items(): Promise<unknown[]>;
   prepend(key: any, val: any, ttl: any, cb: any): any;
   ready(): any;
   replace(key: any, val: any, ttl: any, cb: any): any;
