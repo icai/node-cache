@@ -8,6 +8,7 @@ describe('memcache', () => {
     mem = config({
       store: 'memcache',
       options: {
+        hosts: ['127.0.0.1:11211'],
         mysql: {
           database: 'ncache',
           username: 'root',

@@ -1,8 +1,9 @@
 const CACHE_KEY_LENGTH = 128;
 
 import { ICache } from './@types/cache';
-import { Memcache } from './modules/memcache';
-import { Mysql } from './modules/mysql';
+import Memcache from './modules/memcache';
+import Mysql from './modules/mysql';
+import Redis from './modules/redis';
 
 interface IOptions {
   store: string,
@@ -14,7 +15,7 @@ export const config = (options: IOptions) => {
     const Store = require('./modules/' + options.store);
     store = new Store(options.options);
   }
-  return store as (Mysql| Memcache | ICache);
+  return store as (Mysql| Memcache | Redis | ICache);
 }
 export const cacheKey = (cachekey: string) => {
   cachekey = 'ncache:' + cachekey;
