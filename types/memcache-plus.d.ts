@@ -12,7 +12,7 @@ declare class index {
   delete(key: any, cb: any): any;
   delete(key: any): Promise<unknown[]>;
   deleteMulti(keys: any, cb: any): any;
-  disconnect(opts: any): any;
+  disconnect(opts?: any): any;
   flush(delay: any, cb: any): any;
   flush(delay: any): Promise<unknown[]>;
   flushBuffer(err: any): void;

@@ -4,8 +4,6 @@ import { ICache } from '../@types/cache';
 import { random, tablename } from '../utils/func';
 import Mysql from './mysql';
 
-const MEMCACHE_COMPRESSED = 0;
-
 export default class Memcache implements ICache {
   private memcache: MemcachePlus;
   private dbcache: Mysql;
@@ -21,8 +19,8 @@ export default class Memcache implements ICache {
   }
   public destory() {
     this.dbcache.destory();
+    this.memcache.disconnect();
   }
-
   public async init() {
     await this.dbcache.init();
   }
