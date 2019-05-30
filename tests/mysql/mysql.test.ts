@@ -1,5 +1,4 @@
 import { config } from '../../src/index';
-import { Mysql } from '../../src/modules/mysql';
 
 describe('mysql', () => {
   let mysql: any;

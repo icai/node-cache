@@ -1,22 +1,30 @@
 
 import MemcachePlus from 'memcache-plus';
 import { ICache } from '../@types/cache';
-import { tablename } from '../utils/func';
-import { Mysql } from './mysql';
+import { random, tablename } from '../utils/func';
+import Mysql from './mysql';
 
 const MEMCACHE_COMPRESSED = 0;
 
-export class Memcache implements ICache {
+export default class Memcache implements ICache {
   private memcache: MemcachePlus;
   private dbcache: Mysql;
   constructor(options: any) {
+    // use for forcecache
+    this.dbcache = new Mysql(options.mysql);
     this.memcache = new MemcachePlus({
-      hosts: options.hosts || ['127.0.0.1'],
+      hosts: options.hosts || ['127.0.0.1:11211'],
       // Decrease the netTimeout from the 500ms default to 200ms
       netTimeout: 30
     });
-    // use for forcecache
-    this.dbcache = new Mysql(options.mysql);
+    return this;
+  }
+  public destory() {
+    this.dbcache.destory();
+  }
+
+  public async init() {
+    await this.dbcache.init();
   }
 
   /**
@@ -58,7 +66,7 @@ export class Memcache implements ICache {
     key = await this.namespace(key);
     let result = this.memcacheGet(this.cachePrefix(key));
     if (!result && !forcecache) {
-      const dbcache = await this.dbcache.read('key');
+      const dbcache = await this.dbcache.read(key);
       if (!dbcache.value) {
         result = JSON.parse(dbcache.value);
         this.memcacheSet(this.cachePrefix(key), result);
@@ -77,14 +85,15 @@ export class Memcache implements ICache {
    * write the cache
    * @param key cache key
    * @param data cache value
-   * @param expire expire date
+   * @param ttl ttl
    */
   public async write(key: string, value: any, ttl = 0, forcecache = true) {
     key = await this.namespace(key);
     if (!forcecache) {
       this.dbcache.write(key, value);
     }
-    if (this.memcacheSet(this.cachePrefix(key), value, ttl)) {
+    const result = await this.memcacheSet(this.cachePrefix(key), value, ttl)
+    if (result) {
       return true;
     } else {
       return false;
@@ -94,9 +103,10 @@ export class Memcache implements ICache {
   private cachePrefix(key: string) {
     return tablename(key);
   }
+
   private async memcacheGet(key: string) {
     return new Promise((resolve, reject) => {
-      this.memcache.get(this.cachePrefix(key), null, (res: any) => {
+      this.memcache.get(this.cachePrefix(key), (res: any) => {
         resolve(res)
       });
     })
@@ -104,14 +114,14 @@ export class Memcache implements ICache {
   private async memcacheSet(key: string, value: any, ttl?: number) {
     return new Promise((resolve, reject) => {
       this.memcache.set(key, value, ttl, () => {
-        resolve()
+        resolve(true)
       });
     })
   }
 
   private async memcacheDelete(key: string) {
     return new Promise((resolve, reject) => {
-      this.memcache.deleteMulti(key, (res: any) => {
+      this.memcache.delete(key, (res: any) => {
         resolve()
       });
     })
@@ -120,7 +130,7 @@ export class Memcache implements ICache {
   private async memcacheFlush(delay?: number) {
     return new Promise((resolve, reject) => {
       this.memcache.flush(delay, (res: any) => {
-        resolve()
+        resolve(true)
       });
     })
   }
@@ -141,7 +151,7 @@ export class Memcache implements ICache {
     namespaceCacheKey = 'cachensl:' + namespaceCacheKey;
     let namespace = await this.memcacheGet(this.cachePrefix(namespaceCacheKey));
     if (!namespace || forcenew) {
-      namespace = (Math.random() * 10e5).toFixed();
+      namespace = random(5);
       await this.memcacheSet(this.cachePrefix(namespaceCacheKey), namespace, MEMCACHE_COMPRESSED);
     }
     return namespace + ':' + key;

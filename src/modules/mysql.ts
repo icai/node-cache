@@ -2,7 +2,7 @@ import { QueryTypes, Sequelize } from 'sequelize';
 import { ICache } from '../@types/cache';
 import { tablename } from '../utils/func';
 
-export class Mysql implements ICache {
+export default class Mysql implements ICache {
   private sequelize: Sequelize;
   constructor(options: any) {
     this.sequelize = new Sequelize(options.database, options.username, options.password, {

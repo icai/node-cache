@@ -14,7 +14,6 @@ describe('memcache', () => {
       }
     })
     await mem.init();
-    await mem.clean();
     await mem.write('mem_test1', { ncache: 'testing1' });
     await mem.write('mem_test2', { ncache: 'testing2' });
     await mem.write('mem_test3', { ncache: 'testing3' });

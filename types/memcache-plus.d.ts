@@ -9,11 +9,16 @@ declare class index {
   connect(): void;
   connectToHosts(): void;
   decr(key: any, val: any, cb: any): any;
+  delete(key: any, cb: any): any;
+  delete(key: any): Promise<unknown[]>;
   deleteMulti(keys: any, cb: any): any;
   disconnect(opts: any): any;
   flush(delay: any, cb: any): any;
+  flush(delay: any): Promise<unknown[]>;
   flushBuffer(err: any): void;
+  get(key: any, cb: any): any;
   get(key: any, opts: any, cb: any): any;
+  get(key: any): Promise<unknown[]>;
   getHostList(): any;
   getMulti(keys: any, opts: any, cb: any): any;
   gets(key: any, opts: any, cb: any): any;
@@ -24,6 +29,7 @@ declare class index {
   replace(key: any, val: any, ttl: any, cb: any): any;
   run(command: any, args: any, cb: any): any;
   set(key: any, val: any, ttl: any, cb: any): any;
+  set(key: any, val: any, ttl: any): Promise<unknown[]>;
   splitHost(str: any): any;
   version(cb: any): any;
 }
