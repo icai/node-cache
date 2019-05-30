@@ -20,8 +20,9 @@ export class Mysql implements ICache {
       `SELECT value FROM \`${tablename(`core_cache`)}\` WHERE \`key\`=:key LIMIT 1`,
       {  replacements: { key }, type: QueryTypes.SELECT}
     )
-    // tslint:disable-next-line:no-console
-    console.info(cachedatas);
+    if (!cachedatas.length) {
+      return '';
+    }
     const value: string = (cachedatas[0] as any).value;
     const cachedata = JSON.parse(value);
     if (!cachedata.expire && !cachedata.data) {
@@ -41,10 +42,15 @@ export class Mysql implements ICache {
    */
   public async search(prefix: string) {
     const sequelize = this.sequelize;
-    return sequelize.query(
-      `SELECT value FROM \`${tablename(`core_cache`)}\`  WHERE \`key\` LIKE :key`,
+    const data = await sequelize.query(
+      `SELECT * FROM \`${tablename(`core_cache`)}\`  WHERE \`key\` LIKE :key`,
       { replacements: { key: `${prefix}%` }, type: QueryTypes.SELECT}
     )
+    const result = {} as {[x: string]: any};
+    data.forEach((el: any) => {
+      result[el.key] = JSON.parse(el.value)
+    });
+    return result;
   }
   /**
    * write the cache
@@ -70,7 +76,14 @@ export class Mysql implements ICache {
     record.value = JSON.stringify(cacheData);
     const sequelize = this.sequelize;
     const sql = 'INSERT INTO ' + tablename(`core_cache`) + ' (`key`,`value`) VALUES (:key, :value)';
-    sequelize.query(sql, { replacements: { key: record.key, value: record.value}, type: QueryTypes.INSERT});
+    const result = sequelize.query(sql,
+      { replacements: { key: record.key, value: record.value}, type: QueryTypes.INSERT}
+    );
+    if (!result) {
+      return false
+    } else {
+      return result
+    }
   }
   /**
    * delete cache
@@ -79,7 +92,7 @@ export class Mysql implements ICache {
   public async delete(key: string) {
     const sequelize = this.sequelize;
     const sql = 'DELETE FROM ' + tablename('core_cache') + ' WHERE `key`=:key';
-    sequelize.query(sql, { replacements: { key }, type: QueryTypes.DELETE});
+    return await sequelize.query(sql, { replacements: { key }, type: QueryTypes.DELETE});
   }
   /**
    * clean cache by key prefix
@@ -87,13 +100,15 @@ export class Mysql implements ICache {
    */
   public async clean(prefix?: string) {
     const sequelize = this.sequelize;
+    let result;
     if (!prefix) {
       const sql = 'DELETE FROM ' + tablename('core_cache');
-      sequelize.query(sql, { type: QueryTypes.DELETE});
+      result = sequelize.query(sql, { type: QueryTypes.DELETE});
     } else {
       const sql =  'DELETE FROM ' + tablename('core_cache') + ' WHERE `key` LIKE :key';
-      sequelize.query(sql, {replacements: {key: `${prefix}:%` },  type: QueryTypes.DELETE});
+      result = sequelize.query(sql, {replacements: {key: `${prefix}%` },  type: QueryTypes.DELETE});
     }
+    return result
   }
 }
 
