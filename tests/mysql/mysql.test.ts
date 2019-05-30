@@ -13,7 +13,7 @@ describe('mysql', () => {
         host: 'localhost'
       }
     })
-    await mysql.initDatabase();
+    await mysql.init();
     await mysql.clean();
     await mysql.write('mysql_test1', { ncache: 'testing1' });
     await mysql.write('mysql_test2', { ncache: 'testing2' });

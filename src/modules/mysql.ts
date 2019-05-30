@@ -1,5 +1,5 @@
 import { QueryTypes, Sequelize } from 'sequelize';
-import { ICache } from '../interfaces/cache';
+import { ICache } from '../@type/cache';
 import { tablename } from '../utils/func';
 
 export class Mysql implements ICache {
@@ -15,7 +15,7 @@ export class Mysql implements ICache {
   public destory() {
     this.sequelize.close();
   }
-  public async initDatabase() {
+  public async init() {
     await this.sequelize.query(`
       DROP TABLE IF EXISTS \`${tablename(`core_cache`)}\`
     `, { type: QueryTypes.RAW})

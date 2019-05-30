@@ -50,6 +50,7 @@
     "webpack-cli": "^3.3.2"
   },
   "dependencies": {
+    "memcache-plus": "^0.2.19",
     "mysql2": "^1.6.5",
     "sequelize": "^5.8.7"
   }
