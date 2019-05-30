@@ -3,16 +3,29 @@ import { ICache } from '../interfaces/cache';
 import { tablename } from '../utils/func';
 
 export class Mysql implements ICache {
-  // private options: any;
   private sequelize: Sequelize;
   constructor(options: any) {
-    // this.options = options;
     this.sequelize = new Sequelize(options.database, options.username, options.password, {
       host: options.localhost,
       /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
       dialect: options.dialect || 'mysql'
     });
     return this;
+  }
+  public destory() {
+    this.sequelize.close();
+  }
+  public async initDatabase() {
+    await this.sequelize.query(`
+      DROP TABLE IF EXISTS \`${tablename(`core_cache`)}\`
+    `, { type: QueryTypes.RAW})
+    await this.sequelize.query(`
+      CREATE TABLE \`${tablename(`core_cache`)}\` (
+        \`key\` varchar(50) NOT NULL,
+        \`value\` longtext NOT NULL,
+        PRIMARY KEY (\`key\`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC
+    `, { type: QueryTypes.RAW})
   }
   public async read(key: string) {
     const sequelize = this.sequelize;

@@ -13,6 +13,7 @@ describe('mysql', () => {
         host: 'localhost'
       }
     })
+    await mysql.initDatabase();
     await mysql.clean();
     await mysql.write('mysql_test1', { ncache: 'testing1' });
     await mysql.write('mysql_test2', { ncache: 'testing2' });
@@ -20,6 +21,7 @@ describe('mysql', () => {
   });
   afterAll(async () => {
     await mysql.clean('mysql_test');
+    mysql.destory();
   });
 
   test('mysql read', async () => {
