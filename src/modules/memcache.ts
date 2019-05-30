@@ -11,8 +11,7 @@ export class Memcache implements ICache {
   private dbcache: Mysql;
   constructor(options: any) {
     this.memcache = new MemcachePlus({
-      // Specify 2 hosts
-      hosts: ['127.0.0.1'],
+      hosts: options.hosts || ['127.0.0.1'],
       // Decrease the netTimeout from the 500ms default to 200ms
       netTimeout: 30
     });
@@ -148,3 +147,5 @@ export class Memcache implements ICache {
     return namespace + ':' + key;
   }
 }
+
+module.exports = Memcache;
