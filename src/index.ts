@@ -1,6 +1,6 @@
 const CACHE_KEY_LENGTH = 128;
 
-import { ICache } from './@type/cache';
+import { ICache } from './@types/cache';
 import { Mysql } from './modules/mysql';
 
 interface IOptions {

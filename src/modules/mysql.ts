@@ -1,5 +1,5 @@
 import { QueryTypes, Sequelize } from 'sequelize';
-import { ICache } from '../@type/cache';
+import { ICache } from '../@types/cache';
 import { tablename } from '../utils/func';
 
 export class Mysql implements ICache {
