@@ -14,21 +14,35 @@ export class Mysql implements ICache {
     });
     return this;
   }
-  public read(key: string) {
+  public async read(key: string) {
     const sequelize = this.sequelize;
-    return sequelize.query(
-      `SELECT value FROM \`${tablename(`core_cache`)}\`  WHERE key=${key} LIMIT 1`,
-      { type: QueryTypes.SELECT}
+    const cachedatas = await sequelize.query(
+      `SELECT value FROM \`${tablename(`core_cache`)}\` WHERE \`key\`=:key LIMIT 1`,
+      {  replacements: { key }, type: QueryTypes.SELECT}
     )
+    // tslint:disable-next-line:no-console
+    console.info(cachedatas);
+    const value: string = (cachedatas[0] as any).value;
+    const cachedata = JSON.parse(value);
+    if (!cachedata.expire && !cachedata.data) {
+      if (cachedata.expire > Date.now()) {
+        return cachedata.data;
+      } else {
+        return '';
+      }
+
+    } else {
+      return cachedata
+    }
   }
   /**
    * seach cache by key prefix
    * @param prefix key prefix
    */
-  public search(prefix: string) {
+  public async search(prefix: string) {
     const sequelize = this.sequelize;
     return sequelize.query(
-      `SELECT value FROM \`${tablename(`core_cache`)}\`  WHERE key LIKE :key`,
+      `SELECT value FROM \`${tablename(`core_cache`)}\`  WHERE \`key\` LIKE :key`,
       { replacements: { key: `${prefix}%` }, type: QueryTypes.SELECT}
     )
   }
@@ -38,7 +52,7 @@ export class Mysql implements ICache {
    * @param data cache value
    * @param expire expire date
    */
-  public write(key: string, data: any, expire = 0) {
+  public async write(key: string, data: any, expire = 0) {
     if (!key || !data) {
       return false
     }
@@ -55,29 +69,32 @@ export class Mysql implements ICache {
     }
     record.value = JSON.stringify(cacheData);
     const sequelize = this.sequelize;
-    return sequelize.query(tablename(`core_cache`), record);
+    const sql = 'INSERT INTO ' + tablename(`core_cache`) + ' (`key`,`value`) VALUES (:key, :value)';
+    sequelize.query(sql, { replacements: { key: record.key, value: record.value}, type: QueryTypes.INSERT});
   }
   /**
    * delete cache
    * @param key cache key
    */
-  public delete(key: string) {
+  public async delete(key: string) {
     const sequelize = this.sequelize;
     const sql = 'DELETE FROM ' + tablename('core_cache') + ' WHERE `key`=:key';
-    return sequelize.query(sql, { replacements: { key }, type: QueryTypes.DELETE});
+    sequelize.query(sql, { replacements: { key }, type: QueryTypes.DELETE});
   }
   /**
    * clean cache by key prefix
    * @param prefix cache key prefix
    */
-  public clean(prefix?: string) {
+  public async clean(prefix?: string) {
     const sequelize = this.sequelize;
     if (!prefix) {
       const sql = 'DELETE FROM ' + tablename('core_cache');
-      return sequelize.query(sql, { type: QueryTypes.DELETE});
+      sequelize.query(sql, { type: QueryTypes.DELETE});
     } else {
       const sql =  'DELETE FROM ' + tablename('core_cache') + ' WHERE `key` LIKE :key';
-      return sequelize.query(sql, {replacements: {key: `${prefix}:%` },  type: QueryTypes.DELETE});
+      sequelize.query(sql, {replacements: {key: `${prefix}:%` },  type: QueryTypes.DELETE});
     }
   }
 }
+
+module.exports = Mysql;

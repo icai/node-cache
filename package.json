@@ -4,7 +4,7 @@
   "description": "node cache provider",
   "main": "lib/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -50,6 +50,7 @@
     "webpack-cli": "^3.3.2"
   },
   "dependencies": {
+    "mysql2": "^1.6.5",
     "sequelize": "^5.8.7"
   }
 }

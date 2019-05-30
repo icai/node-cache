@@ -1,5 +1,8 @@
 const CACHE_KEY_LENGTH = 128;
 
+import { ICache } from './interfaces/cache';
+import { Mysql } from './modules/mysql';
+
 interface IOptions {
   store: string,
   options: object
@@ -10,7 +13,7 @@ export const config = (options: IOptions) => {
     const Store = require('./modules/' + options.store);
     store = new Store(options.options);
   }
-  return store;
+  return store as (Mysql| ICache);
 }
 export const cacheKey = (cachekey: string) => {
   cachekey = 'ncache:' + cachekey;
