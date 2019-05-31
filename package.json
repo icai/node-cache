@@ -52,6 +52,7 @@
     "webpack-cli": "^3.3.2"
   },
   "dependencies": {
+    "cacache": "^11.3.2",
     "ioredis": "^4.9.5",
     "lru-cache": "^5.1.1",
     "memcache-plus": "^0.2.19",

@@ -53,4 +53,12 @@ describe('memcache', () => {
       expect(res).toBe('');
     })
   });
+  test('mem delete', async () => {
+    expect.assertions(1);
+    await mem.write('prefix_test_write2', { ncache: 'prefix_test_write2' }, 100)
+    await mem.delete('prefix_test_write2');
+    await mem.read('prefix_test_write2').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
 })

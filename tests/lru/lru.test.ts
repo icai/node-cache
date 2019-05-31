@@ -41,8 +41,17 @@ describe('lru', () => {
     await lru.write('prefix_test_write1', { ncache: 'prefix_test_write1' })
     await lru.write('prefix_test_write2', { ncache: 'prefix_test_write2' })
     await lru.write('prefix_test_write3', { ncache: 'prefix_test_write3' })
-    await lru.clean('prefix')
+    await lru.clean('prefix');
     await lru.read('prefix_test_write1').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
+
+  test('lru  delete', async () => {
+    expect.assertions(1);
+    await lru.write('prefix_test_write2', { ncache: 'prefix_test_write2' })
+    await lru.delete('prefix_test_write2');
+    await lru.read('prefix_test_write2').then((res: any) => {
       expect(res).toBe('');
     })
   });

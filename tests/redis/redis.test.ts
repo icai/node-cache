@@ -47,4 +47,13 @@ describe('redis', () => {
       expect(res).toBe('');
     })
   });
+
+  test('redis delete', async () => {
+    expect.assertions(1);
+    await redis.write('prefix_test_delete1', { ncache: 'prefix_test_delete1' })
+    await redis.delete('prefix_test_delete1');
+    await redis.read('prefix_test_delete1').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
 })

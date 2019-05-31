@@ -49,4 +49,12 @@ describe('mysql', () => {
       expect(res).toBe('');
     })
   });
+  test('mysql delete', async () => {
+    expect.assertions(1);
+    await mysql.write('prefix_test_delete1', { ncache: 'prefix_test_delete1' })
+    await mysql.delete('prefix_test_delete1');
+    await mysql.read('prefix_test_delete1').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
 })
