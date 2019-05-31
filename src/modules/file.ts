@@ -7,7 +7,6 @@ const CACHE_FILE_PATH = path.resolve(__dirname, '.cache');
 /**
  * @class File
  * @classdesc File cache
- * @constructor File
  */
 export default class File implements ICache {
   private cachePath: string;
@@ -19,7 +18,7 @@ export default class File implements ICache {
     return cacache.rm.all(this.cachePath)
   }
   /**
-   * delete cache
+   * @description delete cache
    * @param key cache key
    */
   public async delete(key: string) {
@@ -58,8 +57,7 @@ export default class File implements ICache {
   /**
    * write the cache
    * @param key cache key
-   * @param data cache value
-   * @param ttl ttl
+   * @param value cache value
    */
   public async write(key: string, value: any) {
     value = JSON.stringify(value);

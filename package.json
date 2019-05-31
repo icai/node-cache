@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "test": "jest --detectOpenHandles",
-    "docs": "jsdoc2md build/modules/lru.js build/modules/memcache.js build/modules/file.js build/modules/mysql.js  build/modules/redis.js > API.md"
+    "docs": "jsdoc2md build/modules/lru.js build/modules/memcache.js build/modules/file.js build/modules/mysql.js  build/modules/redis.js > API.md",
+    "bdocs": "npm run build && npm run docs"
   },
   "repository": {
     "type": "git",

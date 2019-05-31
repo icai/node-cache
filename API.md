@@ -177,7 +177,7 @@ File cache
     * [.clean(dir)](#File+clean)
     * [.read(key)](#File+read)
     * [.search(key)](#File+search)
-    * [.write(key, data, ttl)](#File+write)
+    * [.write(key, value)](#File+write)
 
 <a name="File+delete"></a>
 
@@ -225,7 +225,7 @@ seach cache alias read
 
 <a name="File+write"></a>
 
-### file.write(key, data, ttl)
+### file.write(key, value)
 write the cache
 
 **Kind**: instance method of [<code>File</code>](#File)  
@@ -233,8 +233,7 @@ write the cache
 | Param | Description |
 | --- | --- |
 | key | cache key |
-| data | cache value |
-| ttl | ttl |
+| value | cache value |
 
 <a name="Mysql"></a>
 
