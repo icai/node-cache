@@ -35,7 +35,11 @@ you need to install some dependencies for provider.
 
 ## Setup
 
+```js
+
 import { config } from 'node-caches'
+
+```
 
 mysql
 
@@ -104,6 +108,23 @@ lru
     }
   })
 ```
+
+## implements ICache API
+
+```js
+export interface ICache {
+  read: Function,
+  write: Function,
+  delete: Function,
+  search: Function,
+  clean: Function
+}
+```
+
+Also see the [API Documentation](API.md)
+
+
+
 
 
 

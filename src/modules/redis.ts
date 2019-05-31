@@ -3,13 +3,19 @@ import IORedis, { Redis as RedisClient } from 'ioredis';
 import { ICache } from '../types/cache';
 
 const CACHE_EXPIRE_LONG =  3600;
-
+/**
+ * @class Redis
+ * @classdesc Redis cache
+ */
 export default class Redis implements ICache {
   private redis: RedisClient;
   constructor(options: any) {
     this.redis = new IORedis(options);
     return this;
   }
+  /**
+   * @description redis quit
+   */
   public destory() {
     this.redis.quit();
   }
@@ -17,7 +23,7 @@ export default class Redis implements ICache {
     await this.redis.ping('pong');
   }
   /**
-   * delete cache
+   * @description delete cache
    * @param key cache key
    */
   public async delete(key: string, forcecache = true) {
@@ -27,7 +33,7 @@ export default class Redis implements ICache {
     return false;
   }
   /**
-   * clean cache by key prefix
+   * @description clean cache by key prefix
    * @param key cache key prefix
    */
   public async clean(key?: string) {
@@ -43,7 +49,7 @@ export default class Redis implements ICache {
     return false;
   }
   /**
-   * read cache
+   * @description read cache
    * @param key read key
    */
   public async read(key: string) {
@@ -58,7 +64,7 @@ export default class Redis implements ICache {
     return '';
   }
   /**
-   * seach cache by key
+   * @description seach cache by key
    * @param key search key
    */
   public async search(key: string) {
@@ -73,10 +79,10 @@ export default class Redis implements ICache {
     return searchdata;
   }
   /**
-   * write the cache
+   * @description write the cache
    * @param key cache key
    * @param data cache value
-   * @param ttl ttl
+   * @param ttl cache expire time
    */
   public async write(key: string, value: any, ttl = CACHE_EXPIRE_LONG) {
     value = JSON.stringify(value);

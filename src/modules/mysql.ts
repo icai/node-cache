@@ -1,7 +1,10 @@
 import { QueryTypes, Sequelize } from 'sequelize';
 import { ICache } from '../types/cache';
 import { tablename } from '../utils/func';
-
+/**
+ * @class Mysql
+ * @classdesc Mysql cache
+ */
 export default class Mysql implements ICache {
   private sequelize: Sequelize;
   constructor(options: any) {
@@ -12,9 +15,15 @@ export default class Mysql implements ICache {
     });
     return this;
   }
+  /**
+   * @description destory mysql instance
+   */
   public destory() {
     this.sequelize.close();
   }
+  /**
+   * @description init database
+   */
   public async init() {
     await this.sequelize.query(`
       DROP TABLE IF EXISTS \`${tablename(`core_cache`)}\`
@@ -27,6 +36,10 @@ export default class Mysql implements ICache {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC
     `, { type: QueryTypes.RAW})
   }
+  /**
+   * @description read cache by key
+   * @param key the cache key
+   */
   public async read(key: string) {
     const sequelize = this.sequelize;
     const cachedatas = await sequelize.query(
@@ -50,7 +63,7 @@ export default class Mysql implements ICache {
     }
   }
   /**
-   * seach cache by key prefix
+   * @description seach cache by key prefix
    * @param prefix key prefix
    */
   public async search(prefix: string) {
@@ -66,7 +79,7 @@ export default class Mysql implements ICache {
     return result;
   }
   /**
-   * write the cache
+   * @description write the cache
    * @param key cache key
    * @param data cache value
    * @param expire expire date
@@ -99,7 +112,7 @@ export default class Mysql implements ICache {
     }
   }
   /**
-   * delete cache
+   * @description delete cache
    * @param key cache key
    */
   public async delete(key: string) {
@@ -108,7 +121,7 @@ export default class Mysql implements ICache {
     return await sequelize.query(sql, { replacements: { key }, type: QueryTypes.DELETE});
   }
   /**
-   * clean cache by key prefix
+   * @description clean cache by key prefix
    * @param prefix cache key prefix
    */
   public async clean(prefix?: string) {

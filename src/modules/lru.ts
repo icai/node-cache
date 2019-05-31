@@ -2,13 +2,19 @@
 import LRUCache from 'lru-cache';
 import { ICache } from '../types/cache';
 import { escapeReg } from '../utils/func';
-
+/**
+ * @class LRU
+ * @classdesc LRU Cache
+ */
 export default class LRU implements ICache {
   private cache: LRUCache<string, string>;
   constructor(options: any) {
     this.cache = new LRUCache(options);
     return this;
   }
+  /**
+   * @description lru reset
+   */
   public destory() {
     this.cache.reset();
   }
@@ -79,8 +85,7 @@ export default class LRU implements ICache {
   /**
    * write the cache
    * @param key cache key
-   * @param data cache value
-   * @param ttl ttl
+   * @param value cache value
    */
   public async write(key: string, value: any) {
     value = JSON.stringify(value);
@@ -89,7 +94,6 @@ export default class LRU implements ICache {
     }
     return false;
   }
-
   private cachePrefix(key: string) {
     return 'ncache:' + key;
   }

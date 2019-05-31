@@ -1,9 +1,12 @@
 
 import MemcachePlus from 'memcache-plus';
 import { ICache } from '../types/cache';
-import { random, tablename } from '../utils/func';
+import { random } from '../utils/func';
 import Mysql from './mysql';
-
+/**
+ * @class Memcache
+ * @classdesc Memcache cache
+ */
 export default class Memcache implements ICache {
   private memcache: MemcachePlus;
   private dbcache: Mysql;
@@ -67,7 +70,11 @@ export default class Memcache implements ICache {
       console.info(items)
     })
   }
-
+  /**
+   * 
+   * @param key 
+   * @param forcecache 
+   */
   public async read(key: string, forcecache = true) {
     key = await this.namespace(key);
     let result = await this.memcacheGet(this.cachePrefix(key));

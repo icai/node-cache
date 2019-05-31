@@ -2,10 +2,13 @@
 import cacache from 'cacache';
 import path from 'path';
 import { ICache } from '../types/cache';
-import { escapeReg } from '../utils/func';
 
 const CACHE_FILE_PATH = path.resolve(__dirname, '.cache');
-
+/**
+ * @class File
+ * @classdesc File cache
+ * @constructor File
+ */
 export default class File implements ICache {
   private cachePath: string;
   constructor(options: any) {
