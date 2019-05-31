@@ -5,8 +5,7 @@
 <dd><p>LRU Cache</p>
 </dd>
 <dt><a href="#Memcache">Memcache</a></dt>
-<dd><p>Memcache
-@ Memcache cache</p>
+<dd><p>Memcache cache</p>
 </dd>
 <dt><a href="#File">File</a></dt>
 <dd><p>File cache</p>
@@ -99,8 +98,7 @@ write the cache
 <a name="Memcache"></a>
 
 ## Memcache
-Memcache
-@ Memcache cache
+Memcache cache
 
 **Kind**: global class  
 
