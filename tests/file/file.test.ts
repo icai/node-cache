@@ -6,7 +6,7 @@ describe('file', () => {
     file = config({
       store: 'file',
       options: {
-
+        
       }
     })
     await file.clean();

@@ -1,6 +1,6 @@
 
 import MemcachePlus from 'memcache-plus';
-import { ICache } from '../@types/cache';
+import { ICache } from '../types/cache';
 import { random, tablename } from '../utils/func';
 import Mysql from './mysql';
 
@@ -13,7 +13,7 @@ export default class Memcache implements ICache {
     this.memcache = new MemcachePlus({
       hosts: options.hosts || ['127.0.0.1:11211'],
       // Decrease the netTimeout from the 500ms default to 200ms
-      netTimeout: 30
+      netTimeout: options.timeout || 30
     });
     return this;
   }

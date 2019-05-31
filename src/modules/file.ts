@@ -1,7 +1,7 @@
 
 import cacache from 'cacache';
 import path from 'path';
-import { ICache } from '../@types/cache';
+import { ICache } from '../types/cache';
 import { escapeReg } from '../utils/func';
 
 const CACHE_FILE_PATH = path.resolve(__dirname, '.cache');
@@ -23,8 +23,8 @@ export default class File implements ICache {
     return cacache.rm(this.cachePath, this.cachePrefix(key))
   }
   /**
-   * clean cache by key prefix
-   * @param key cache key prefix
+   * clean cache
+   * @param dir cache dir
    */
   public async clean(dir?: string) {
     return cacache.rm.all(this.cachePath);
@@ -46,7 +46,7 @@ export default class File implements ICache {
     return '';
   }
   /**
-   * seach cache by key
+   * seach cache alias read
    * @param key search key
    */
   public async search(key: string) {

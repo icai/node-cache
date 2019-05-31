@@ -1,6 +1,6 @@
 
 import LRUCache from 'lru-cache';
-import { ICache } from '../@types/cache';
+import { ICache } from '../types/cache';
 import { escapeReg } from '../utils/func';
 
 export default class LRU implements ICache {

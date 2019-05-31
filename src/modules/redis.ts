@@ -1,6 +1,6 @@
 
 import IORedis, { Redis as RedisClient } from 'ioredis';
-import { ICache } from '../@types/cache';
+import { ICache } from '../types/cache';
 
 const CACHE_EXPIRE_LONG =  3600;
 

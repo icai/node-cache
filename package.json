@@ -1,9 +1,13 @@
 {
-  "name": "node-cache",
+  "name": "node-caches",
   "version": "1.0.0",
   "description": "node cache provider",
-  "main": "lib/index.js",
+  "files": [
+    "build/"
+  ],
+  "main": "build/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "jest --detectOpenHandles"
   },
   "repository": {
@@ -12,7 +16,12 @@
   },
   "keywords": [
     "node",
-    "cache"
+    "cache",
+    "lru",
+    "memcache",
+    "redis",
+    "mysql",
+    "file-cache"
   ],
   "author": "Terry Cai",
   "license": "MIT",
@@ -32,31 +41,23 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/preset-typescript": "^7.3.3",
     "@types/bluebird": "^3.5.27",
     "@types/ioredis": "^4.0.11",
     "@types/jest": "^24.0.13",
     "@types/lru-cache": "^5.1.0",
     "@types/node": "^12.0.3",
     "@types/validator": "^10.11.0",
-    "babel-jest": "^24.8.0",
-    "babel-loader": "^8.0.6",
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
-    "ts-loader": "^6.0.1",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5",
-    "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2"
-  },
-  "dependencies": {
     "cacache": "^11.3.2",
     "ioredis": "^4.9.5",
     "lru-cache": "^5.1.1",
     "memcache-plus": "^0.2.19",
     "mysql2": "^1.6.5",
     "sequelize": "^5.8.7"
+  },
+  "dependencies": {
   }
 }
