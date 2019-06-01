@@ -15,7 +15,6 @@ you need to install some dependencies for provider.
 ```
   npm i sequelize mysql2 --save
 ```
-
 - Memcache
 ```
   npm i memcache-plus sequelize mysql2 --save
@@ -31,6 +30,11 @@ you need to install some dependencies for provider.
 - LRU
 ```
   npm i lru-cache --save
+```
+- Mongodb
+```
+npm i mongodb --save
+
 ```
 
 ## Setup
@@ -105,6 +109,17 @@ lru
     options: {
       max: 500,
       maxAge: 1000 * 60 * 60
+    }
+  })
+```
+
+mongodb
+
+```js
+  mongodb = config({
+    store: 'mongodb',
+    options: {
+      url: 'mongodb://localhost:27017'
     }
   })
 ```

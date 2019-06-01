@@ -1,6 +1,6 @@
 {
   "name": "node-caches",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "node cache provider",
   "files": [
     "build/"
@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest --detectOpenHandles",
-    "docs": "jsdoc2md build/modules/lru.js build/modules/memcache.js build/modules/file.js build/modules/mysql.js  build/modules/redis.js > API.md",
+    "docs": "jsdoc2md build/modules/lru.js build/modules/memcache.js build/modules/file.js build/modules/mysql.js  build/modules/redis.js build/modules/mongodb.js > API.md",
     "bdocs": "npm run build && npm run docs"
   },
   "repository": {
@@ -47,6 +47,7 @@
     "@types/ioredis": "^4.0.11",
     "@types/jest": "^24.0.13",
     "@types/lru-cache": "^5.1.0",
+    "@types/mongodb": "^3.1.27",
     "@types/node": "^12.0.3",
     "@types/validator": "^10.11.0",
     "cacache": "^11.3.2",
@@ -56,6 +57,7 @@
     "jsdoc-to-markdown": "^5.0.0",
     "lru-cache": "^5.1.1",
     "memcache-plus": "^0.2.19",
+    "mongodb": "^3.2.6",
     "mysql2": "^1.6.5",
     "sequelize": "^5.8.7",
     "ts-jest": "^24.0.2",

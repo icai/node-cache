@@ -3,6 +3,7 @@ const CACHE_KEY_LENGTH = 128;
 import File from './modules/file';
 import LRU from './modules/lru';
 import Memcache from './modules/memcache';
+import Mongodb from './modules/mongodb';
 import Mysql from './modules/mysql';
 import Redis from './modules/redis';
 import { ICache } from './types/cache';
@@ -17,7 +18,7 @@ export const config = (options: IOptions) => {
     const Store = require('./modules/' + options.store);
     store = new Store(options.options);
   }
-  return store as (Mysql| Memcache | Redis | File | LRU | ICache);
+  return store as (Mysql| Memcache | Redis | File | LRU | Mongodb | ICache);
 }
 export const cacheKey = (cachekey: string) => {
   cachekey = 'ncache:' + cachekey;

@@ -16,6 +16,9 @@
 <dt><a href="#Redis">Redis</a></dt>
 <dd><p>Redis cache</p>
 </dd>
+<dt><a href="#Mongodb">Mongodb</a></dt>
+<dd><p>Mongodb cache</p>
+</dd>
 </dl>
 
 <a name="LRU"></a>
@@ -397,4 +400,93 @@ write the cache
 | key | cache key |
 | data | cache value |
 | ttl | cache expire time |
+
+<a name="Mongodb"></a>
+
+## Mongodb
+Mongodb cache
+
+**Kind**: global class  
+
+* [Mongodb](#Mongodb)
+    * [.destory()](#Mongodb+destory)
+    * [.init(options)](#Mongodb+init)
+    * [.delete(key)](#Mongodb+delete)
+    * [.clean(key)](#Mongodb+clean)
+    * [.read(key)](#Mongodb+read)
+    * [.search(key)](#Mongodb+search)
+    * [.write(key, value)](#Mongodb+write)
+
+<a name="Mongodb+destory"></a>
+
+### mongodb.destory()
+mongodb close
+
+**Kind**: instance method of [<code>Mongodb</code>](#Mongodb)  
+<a name="Mongodb+init"></a>
+
+### mongodb.init(options)
+mongodb init, createCollection etc.
+
+**Kind**: instance method of [<code>Mongodb</code>](#Mongodb)  
+
+| Param | Description |
+| --- | --- |
+| options | constructor options |
+
+<a name="Mongodb+delete"></a>
+
+### mongodb.delete(key)
+delete cache
+
+**Kind**: instance method of [<code>Mongodb</code>](#Mongodb)  
+
+| Param | Description |
+| --- | --- |
+| key | cache key |
+
+<a name="Mongodb+clean"></a>
+
+### mongodb.clean(key)
+clean cache by key prefix
+
+**Kind**: instance method of [<code>Mongodb</code>](#Mongodb)  
+
+| Param | Description |
+| --- | --- |
+| key | cache key prefix |
+
+<a name="Mongodb+read"></a>
+
+### mongodb.read(key)
+read cache
+
+**Kind**: instance method of [<code>Mongodb</code>](#Mongodb)  
+
+| Param | Description |
+| --- | --- |
+| key | read key |
+
+<a name="Mongodb+search"></a>
+
+### mongodb.search(key)
+seach cache by key
+
+**Kind**: instance method of [<code>Mongodb</code>](#Mongodb)  
+
+| Param | Description |
+| --- | --- |
+| key | search key |
+
+<a name="Mongodb+write"></a>
+
+### mongodb.write(key, value)
+write the cache
+
+**Kind**: instance method of [<code>Mongodb</code>](#Mongodb)  
+
+| Param | Description |
+| --- | --- |
+| key | cache key |
+| value | cache value |
 
