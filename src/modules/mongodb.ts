@@ -1,9 +1,7 @@
 
-// import { Collection, MongoClient } from 'mongodb';
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import { ICache } from '../types/cache';
 import { escapeReg } from '../utils/func';
-
 
 /**
  * @class Mongodb
@@ -34,7 +32,6 @@ export default class Mongodb implements ICache {
     // Database Name
     const dbName = 'ncache';
     const dbCollection = 'ncache';
-    // const conn = mongoose.connect(`${url}/${dbName}`, {useNewUrlParser: true});
     const conn = await mongoose.createConnection(`${url}/${dbName}`, {useNewUrlParser: true});
     const schema = new Schema({
       key: {
@@ -48,18 +45,6 @@ export default class Mongodb implements ICache {
     const NcacheModel = conn.model(dbCollection, schema);
     this.collection = NcacheModel;
 
-    // Use connect method to connect to the server
-    // const client = await MongoClient.connect(url);
-    // const db = client.db(dbName);
-    // await db.createCollection(dbCollection, { validator : { $and:
-    //   [
-    //     { key: { $type: 'string', $unique: true, $exists: true } },
-    //     { value: { $type: 'string', $exists: true } }
-    //   ]}
-    // });
-    // this.client = client;
-    // this.collection = db.collection(dbCollection);
-    // await this.collection.createIndex({ key: 1 }, { unique: true });
     return this;
   }
   /**
@@ -128,7 +113,9 @@ export default class Mongodb implements ICache {
    */
   public async write(key: string, value: any) {
     value = JSON.stringify(value);
-    if (await this.collection.create({ key: this.cachePrefix(key), value})) {
+    if (await this.collection.findOneAndUpdate(
+     { key: this.cachePrefix(key)},
+     { value}, { upsert: true, new: true })) {
       return true;
     }
     return false;

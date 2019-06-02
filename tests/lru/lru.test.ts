@@ -55,4 +55,16 @@ describe('lru', () => {
       expect(res).toBe('');
     })
   });
+  test('lru insert conflict', async () => {
+    expect.assertions(2);
+    await lru.write('prefix_test_write2', { ncache: 'prefix_test_write2' })
+    await lru.write('prefix_test_write2', { ncache: 'prefix_test_write2_alias' })
+    await lru.read('prefix_test_write2').then((res: any) => {
+      expect(res.ncache).toBe('prefix_test_write2_alias');
+    })
+    await lru.delete('prefix_test_write2');
+    await lru.read('prefix_test_write2').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
 })

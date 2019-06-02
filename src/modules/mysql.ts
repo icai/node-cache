@@ -101,9 +101,10 @@ export default class Mysql implements ICache {
     }
     record.value = JSON.stringify(cacheData);
     const sequelize = this.sequelize;
-    const sql = 'INSERT INTO ' + tablename(`core_cache`) + ' (`key`,`value`) VALUES (:key, :value)';
-    const result = sequelize.query(sql,
-      { replacements: { key: record.key, value: record.value}, type: QueryTypes.INSERT}
+    const sql = 'INSERT INTO ' + tablename(`core_cache`) +
+    ' (`key`,`value`) VALUES (:key, :value) ON DUPLICATE KEY UPDATE value=:value';
+    const result = await sequelize.query(sql,
+      { replacements: { key: record.key, value: record.value}, type: QueryTypes.UPSERT}
     );
     if (!result) {
       return false

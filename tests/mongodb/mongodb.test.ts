@@ -55,4 +55,16 @@ describe('mongodb', () => {
       expect(res).toBe('');
     })
   });
+  test('mongodb insert conflict', async () => {
+    expect.assertions(2);
+    await mongodb.write('prefix_test_delete1', { ncache: 'prefix_test_delete1' })
+    await mongodb.write('prefix_test_delete1', { ncache: 'prefix_test_delete1_alias' })
+    await mongodb.read('prefix_test_delete1').then((res: any) => {
+      expect(res.ncache).toBe('prefix_test_delete1_alias');
+    })
+    await mongodb.delete('prefix_test_delete1');
+    await mongodb.read('prefix_test_delete1').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
 })

@@ -56,4 +56,17 @@ describe('redis', () => {
       expect(res).toBe('');
     })
   });
+
+  test('redis insert conflict', async () => {
+    expect.assertions(2);
+    await redis.write('prefix_test_delete1', { ncache: 'prefix_test_delete1' })
+    await redis.write('prefix_test_delete1', { ncache: 'prefix_test_delete1_alias' })
+    await redis.read('prefix_test_delete1').then((res: any) => {
+      expect(res.ncache).toBe('prefix_test_delete1_alias');
+    })
+    await redis.delete('prefix_test_delete1');
+    await redis.read('prefix_test_delete1').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
 })

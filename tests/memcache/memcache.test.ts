@@ -61,4 +61,16 @@ describe('memcache', () => {
       expect(res).toBe('');
     })
   });
+  test('mem insert conflict', async () => {
+    expect.assertions(2);
+    await mem.write('prefix_test_write2', { ncache: 'prefix_test_write2' }, 100)
+    await mem.write('prefix_test_write2', { ncache: 'prefix_test_write2_alias' }, 100)
+    await mem.read('prefix_test_write2').then((res: any) => {
+      expect(res.ncache).toBe('prefix_test_write2_alias');
+    })
+    await mem.delete('prefix_test_write2');
+    await mem.read('prefix_test_write2').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
 })

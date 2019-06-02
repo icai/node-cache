@@ -57,4 +57,16 @@ describe('mysql', () => {
       expect(res).toBe('');
     })
   });
+  test('mysql insert conflict', async () => {
+    expect.assertions(2);
+    await mysql.write('prefix_test_delete1', { ncache: 'prefix_test_delete1' })
+    await mysql.write('prefix_test_delete1', { ncache: 'prefix_test_delete1_alias' })
+    await mysql.read('prefix_test_delete1').then((res: any) => {
+      expect(res.data.ncache).toBe('prefix_test_delete1_alias');
+    })
+    await mysql.delete('prefix_test_delete1');
+    await mysql.read('prefix_test_delete1').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
 })

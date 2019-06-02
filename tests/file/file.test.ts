@@ -6,7 +6,6 @@ describe('file', () => {
     file = config({
       store: 'file',
       options: {
-        
       }
     })
     await file.clean();
@@ -49,6 +48,19 @@ describe('file', () => {
   test('file delete', async () => {
     expect.assertions(1);
     await file.write('prefix_test_write1', { ncache: 'prefix_test_write1' })
+    await file.delete('prefix_test_write1');
+    await file.read('prefix_test_write1').then((res: any) => {
+      expect(res).toBe('');
+    })
+  });
+
+  test('file insert conflict', async () => {
+    expect.assertions(2);
+    await file.write('prefix_test_write1', { ncache: 'prefix_test_write1' })
+    await file.write('prefix_test_write1', { ncache: 'prefix_test_write1_alias' })
+    await file.read('prefix_test_write1').then((res: any) => {
+      expect(res.ncache).toBe('prefix_test_write1_alias');
+    })
     await file.delete('prefix_test_write1');
     await file.read('prefix_test_write1').then((res: any) => {
       expect(res).toBe('');
