@@ -60,6 +60,8 @@ mysql = config({
 
 ```
 
+`options` parameters will be passed to http://docs.sequelizejs.com/class/lib/sequelize.js~Sequelize.html#instance-constructor-constructor
+
 memcache
 
 ```js
@@ -78,6 +80,10 @@ memcache
 
 ```
 
+`options` parameters will be passed to https://github.com/victorquinn/memcache-plus/blob/master/docs/initialization.md#options
+
+`options.mysql` parameters will be passed to http://docs.sequelizejs.com/class/lib/sequelize.js~Sequelize.html#instance-constructor-constructor
+
 file
 
 ```js
@@ -88,6 +94,7 @@ file
     }
   })
 ```
+
 
 redis
 
@@ -100,6 +107,7 @@ redis
     }
   })
 ```
+`options` parameters will be passed to https://github.com/luin/ioredis/blob/master/API.md#new_Redis_new
 
 lru
 
@@ -112,6 +120,8 @@ lru
     }
   })
 ```
+
+`options` parameters will be passed to  https://github.com/isaacs/node-lru-cache#options
 
 mongodb
 

@@ -10,13 +10,14 @@ import Mysql from './mysql';
 export default class Memcache implements ICache {
   private memcache: MemcachePlus;
   private dbcache: Mysql;
-  constructor(options: any) {
+  constructor({ hosts, mysql, netTimeout, ...rest}: any) {
     // use for forcecache
-    this.dbcache = new Mysql(options.mysql);
+    this.dbcache = new Mysql(mysql);
     this.memcache = new MemcachePlus({
-      hosts: options.hosts || ['127.0.0.1:11211'],
+      hosts: hosts || ['127.0.0.1:11211'],
       // Decrease the netTimeout from the 500ms default to 200ms
-      netTimeout: options.timeout || 30
+      netTimeout: netTimeout || 30,
+      ...rest
     });
     return this;
   }
@@ -71,16 +72,16 @@ export default class Memcache implements ICache {
     })
   }
   /**
-   * 
-   * @param key 
-   * @param forcecache 
+   * read the cache
+   * @param key cache key
+   * @param forcecache use force cache, default `true`
    */
   public async read(key: string, forcecache = true) {
     key = await this.namespace(key);
     let result = await this.memcacheGet(this.cachePrefix(key));
     if (!result && !forcecache) {
       const dbcache = await this.dbcache.read(key);
-      if (!dbcache.value) {
+      if (dbcache.value) {
         result = JSON.parse(dbcache.value);
         this.memcacheSet(this.cachePrefix(key), result);
       }
