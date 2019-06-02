@@ -7,11 +7,12 @@ import { tablename } from '../utils/func';
  */
 export default class Mysql implements ICache {
   private sequelize: Sequelize;
-  constructor(options: any) {
-    this.sequelize = new Sequelize(options.database, options.username, options.password, {
-      host: options.localhost,
+  constructor({ database, username, password, localhost, dialect, ...rest}: any) {
+    this.sequelize = new Sequelize(database, username, password, {
+      host: localhost,
       /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
-      dialect: options.dialect || 'mysql'
+      dialect: dialect || 'mysql',
+      ...rest
     });
     return this;
   }
