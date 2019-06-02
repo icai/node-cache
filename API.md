@@ -137,12 +137,14 @@ clean cache by key prefix
 <a name="Memcache+read"></a>
 
 ### memcache.read(key, forcecache)
+read the cache
+
 **Kind**: instance method of [<code>Memcache</code>](#Memcache)  
 
-| Param | Default |
-| --- | --- |
-| key |  | 
-| forcecache | <code>true</code> | 
+| Param | Default | Description |
+| --- | --- | --- |
+| key |  | cache key |
+| forcecache | <code>true</code> | use force cache, default `true` |
 
 <a name="Memcache+search"></a>
 
