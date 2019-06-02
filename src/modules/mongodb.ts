@@ -1,20 +1,17 @@
 
-import { Collection, Db, MongoClient } from 'mongodb';
+// import { Collection, MongoClient } from 'mongodb';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 import { ICache } from '../types/cache';
 import { escapeReg } from '../utils/func';
 
-interface ISchema {
-  key: string,
-  value: string
-}
 
 /**
  * @class Mongodb
  * @classdesc Mongodb cache
  */
 export default class Mongodb implements ICache {
-  private client: MongoClient;
-  private collection: Collection<ISchema>;
+  // private client: MongoClient;
+  private collection: Model<Document>;
   private options: any;
   constructor(options: any) {
     this.options = options;
@@ -25,7 +22,7 @@ export default class Mongodb implements ICache {
    * @description mongodb close
    */
   public destory() {
-    this.client.close();
+    mongoose.connection.close()
   }
   /**
    * mongodb init, createCollection etc.
@@ -37,18 +34,32 @@ export default class Mongodb implements ICache {
     // Database Name
     const dbName = 'ncache';
     const dbCollection = 'ncache';
+    // const conn = mongoose.connect(`${url}/${dbName}`, {useNewUrlParser: true});
+    const conn = await mongoose.createConnection(`${url}/${dbName}`, {useNewUrlParser: true});
+    const schema = new Schema({
+      key: {
+        type: String,
+        index: true,
+        unique: true
+      },
+      value: String
+    }, { collection: dbCollection });
+
+    const NcacheModel = conn.model(dbCollection, schema);
+    this.collection = NcacheModel;
+
     // Use connect method to connect to the server
-    const client = await MongoClient.connect(url);
-    const db = client.db(dbName);
-    await db.createCollection(dbCollection, { validator : { $and:
-      [
-        { key: { $type: 'string', $unique: true, $exists: true } },
-        { value: { $type: 'string', $exists: true } }
-      ]}
-    });
-    this.client = client;
-    this.collection = db.collection(dbCollection);
-    await this.collection.createIndex({ key: 1 }, { unique: true });
+    // const client = await MongoClient.connect(url);
+    // const db = client.db(dbName);
+    // await db.createCollection(dbCollection, { validator : { $and:
+    //   [
+    //     { key: { $type: 'string', $unique: true, $exists: true } },
+    //     { value: { $type: 'string', $exists: true } }
+    //   ]}
+    // });
+    // this.client = client;
+    // this.collection = db.collection(dbCollection);
+    // await this.collection.createIndex({ key: 1 }, { unique: true });
     return this;
   }
   /**
@@ -56,8 +67,8 @@ export default class Mongodb implements ICache {
    * @param key cache key
    */
   public async delete(key: string) {
-    const keys: any = await this.collection.deleteOne({ key: this.cachePrefix(key)});
-    const result = keys.toJSON()
+    const result: any = await this.collection.deleteOne({ key: this.cachePrefix(key)});
+    // const result = keys.toJSON()
     if (result) {
       return (result.ok) ? true : false;
     }
@@ -70,8 +81,8 @@ export default class Mongodb implements ICache {
   public async clean(key?: string) {
     if (key) {
       const reg = new RegExp('^' + escapeReg(this.cachePrefix(key)));
-      const keys: any = await this.collection.remove({ key: reg});
-      const result = keys.toJSON();
+      const result: any = await this.collection.remove({ key: reg});
+      // const result = keys.toJSON();
       if (result) {
         return (result.ok) ? true : false;
       }
@@ -86,7 +97,8 @@ export default class Mongodb implements ICache {
    * @param key read key
    */
   public async read(key: string) {
-    let data = await this.collection.findOne({key: this.cachePrefix(key)}, {projection: { value: 1 }});
+    // {projection: { value: 1 }}
+    let data: any = await this.collection.findOne({key: this.cachePrefix(key)}, 'value');
     if (data) {
       data = JSON.parse(data.value);
       return data;
@@ -99,7 +111,8 @@ export default class Mongodb implements ICache {
    */
   public async search(key: string) {
     const reg = new RegExp('^' + escapeReg(this.cachePrefix(key)));
-    const keys =  await this.collection.find({ key: reg}, {projection: {  key: 1, value: 1 }}).toArray();
+    // {projection: {  key: 1, value: 1 }}
+    const keys =  await this.collection.find({ key: reg}, 'key value');
     const result = {} as any;
     if (keys) {
       keys.forEach((item: any) => {
@@ -115,7 +128,7 @@ export default class Mongodb implements ICache {
    */
   public async write(key: string, value: any) {
     value = JSON.stringify(value);
-    if (await this.collection.insertOne({ key: this.cachePrefix(key), value})) {
+    if (await this.collection.create({ key: this.cachePrefix(key), value})) {
       return true;
     }
     return false;

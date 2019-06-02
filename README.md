@@ -33,7 +33,7 @@ you need to install some dependencies for provider.
 ```
 - Mongodb
 ```
-npm i mongodb --save
+npm i mongoose --save
 
 ```
 
